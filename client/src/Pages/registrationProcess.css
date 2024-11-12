@@ -1,0 +1,76 @@
+
+
+.registers{
+
+    background-image: url('../images/background.jfif');
+    background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /*height: 100vh;*/
+  width: 100%;
+}
+
+.containers {
+    
+    margin-left: 50em;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    align-items: flex-end;
+	width: 450px;
+	height: 650px;
+    align-items: center;
+	background: red;
+	overflow: hidden;
+	background-color: rgba(0, 0, 0, 0.8);
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 5px 20px 50px #000;
+}
+
+
+
+.box {
+     
+    width: 280px;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: left;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #c79200;
+   
+}
+
+.green {
+    background-color: #c79200;
+}
+
+.yellow {
+    background-color: #c79200;
+}
+
+
+.proceed-btn {
+    align-items: last baseline;
+    margin-top: 60px;
+    width: 120px;
+    padding: 10px;
+    background-color: #eae7e2;
+    border: none;
+    border-radius: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn
+{
+    margin-top: 80px; 
+    width: 320px;
+    padding: 10px;
+
+}

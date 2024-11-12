@@ -1,0 +1,211 @@
+.register{
+
+    background-image: url('../images/background.jfif');
+    background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /*height: 100vh;*/
+  width: 100%;
+}
+.main{
+    margin-left: 50em;
+    margin-top: 20px;
+    margin-bottom: 100px;
+	width: 350px;
+	height: 550px;
+    align-items: center;
+	background: red;
+	overflow: hidden;
+	background-color: rgba(0, 0, 0, 0.8);
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 5px 20px 50px #000;
+}
+#chk{
+	display: none;
+}
+.signup{
+	position: relative;
+	width:100%;
+	height: 100%;
+}
+label{
+	color: #fff;
+	font-size: 2.3em;
+	justify-content: center;
+	display: flex;
+	margin: 50px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: .5s ease-in-out;
+}
+input{
+	width: 70%;
+	height: 10px;
+	background: #e0dede;
+	justify-content: center;
+	display: flex;
+	margin: 20px auto;
+	padding: 12px;
+	border: none;
+	outline: none;
+	border-radius: 5px;
+}
+select{
+    width: 70%;
+	height: 10px;
+	background: #e0dede;
+	justify-content: center;
+	display: flex;
+	margin: 20px auto;
+	padding: 12px;
+	border: none;
+	outline: none;
+	border-radius: 5px;
+}
+button{
+	width: 60%;
+	height: 40px;
+	margin: 10px auto;
+	justify-content: center;
+	display: block;
+	color: #fff;
+	background: #c79200;
+	font-size: 1em;
+	font-weight: bold;
+	margin-top: 30px;
+	outline: none;
+	border: none;
+	border-radius: 5px;
+	transition: .2s ease-in;
+	cursor: pointer;
+}
+button:hover{
+	background: #6e591e;
+}
+.login{
+	height: 460px;
+	background: #eee;
+	border-radius: 60% / 10%;
+	transform: translateY(-180px);
+	transition: .8s ease-in-out;
+}
+.login label{
+	color: #000000;
+	transform: scale(.6);
+}
+
+#chk:checked ~ .login{
+	transform: translateY(-500px);
+}
+#chk:checked ~ .login label{
+	transform: scale(1);	
+}
+#chk:checked ~ .signup label{
+	transform: scale(.6);
+}
+
+.login-form label {
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: block;
+    color: #333;
+}
+
+.login-form input[type="text"],
+.login-form input[type="tel"],
+.login-form input[type="email"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.login-form input[type="text"]:focus,
+.login-form input[type="tel"]:focus,
+.login-form input[type="email"]:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+.login-form .terms {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.login-form .terms input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.login-form .terms label {
+    font-size: 14px;
+    color: #333;
+}
+
+.login-form .captcha {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.login-form .captcha label {
+    font-size: 14px;
+    color: #333;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.login-form .captcha input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-form button:hover {
+    background-color: #45a049;
+}
+
+.login-form button:disabled {
+    background-color: #ccc;
+}
+
+.login-form .cancel {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.login-form .cancel a {
+    color: #FF0000;
+    text-decoration: none;
+}
+
+.login-form .cancel a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+    .login-form {
+        padding: 20px;
+    }
+
+    .login-form h2 {
+        font-size: 20px;
+    }
+
+    .login-form button {
+        font-size: 14px;
+    }
+}

@@ -1,0 +1,15 @@
+.footer {
+    background-color: black;       /* Black background */
+    height: 100px;
+    color: white;                  /* White text */
+    text-align: center;            /* Center align the text */
+    padding: 20px 0;               /* Padding for top and bottom */
+    font-size: 14px;               /* Set font size */
+    position: relative;            /* Normal positioning (you can change to fixed if needed) */
+    bottom: 0;                     /* Stick to the bottom if it's a fixed position */
+    width: 100%;                   /* Full width */
+  }
+  
+  .footer p {
+    margin: 0;                     /* Remove margin for paragraph */
+  }

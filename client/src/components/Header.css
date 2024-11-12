@@ -1,0 +1,77 @@
+*{padding: 0; margin: 0; box-sizing: border-box;}*
+.body{height: 900px;}
+header {
+    background-color: rgb(8, 3, 8);
+	text-align: center;
+	width: 100%;
+	height: 260px;
+	background-size: cover;
+	background-attachment: fixed;
+	position: relative;
+	overflow: hidden;
+	border-radius: 0 0 85% 85% / 30%;
+}
+.logo{
+    display: flex;
+    justify-content: space-between;
+
+}
+.left {
+    width: 130px; 
+    margin-left: 40px;
+    margin-top: 10px;
+    height: auto;
+}
+.right
+{
+    width: 130px; 
+    margin-right: 40px;
+    margin-top: 10px;
+    height: auto;
+}
+.topicbox{
+	width: 100%;
+	height: 100%;
+	padding: 50px;
+	color: aliceblue;
+	text-shadow: 1px 1px 1px #333;
+  background-image: linear-gradient( 135deg, #9f05ff69 10%, #fd5e086b 100%);
+	
+}
+
+.h1 {
+	font-family: 'Dancing Script', cursive;
+    color: aliceblue; 
+	font-size: 80px;
+	margin-bottom: 30px;
+}
+
+.h3 {
+	font-size: 40px;
+    color: aliceblue; 
+	
+}
+
+
+.p1 {
+	font-family: 'Open Sans', sans-serif;
+    color: aliceblue; 
+	margin-bottom: 30px;
+    margin-top: 10px;
+}
+
+.login-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #ca993e;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+.login-button:hover:hover{
+    background-color: #6d5c2b;
+}
+
+
