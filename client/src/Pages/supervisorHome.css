@@ -1,0 +1,60 @@
+/* SupervisorHome.css */
+.page{
+    background-image: url('../images/background.jfif');
+    background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /*height: 100vh;*/
+  width: 100%;
+}
+
+.topics{
+    color: #000;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between; /* Ensures boxes are spaced evenly */
+    align-items: stretch; /* Ensures boxes have the same height */
+    gap: 20px;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .box {
+    flex: 1; /* Both boxes take up equal width */
+    width : 500px;
+    height : 350px;
+    background-color: rgb(214, 163, 21);;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column; /* Ensures content stacks vertically inside */
+  }
+  
+  .scroll-box {
+    flex: 1; /* Makes the scrollable area grow to fill remaining space */
+    max-height: 300px;
+    overflow-y: auto; /* Adds vertical scrolling if content overflows */
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #c79200;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 1);;
+  }
+
+  .align2{
+    position: absolute;
+    top: 400px;
+    right: 300px;
+   
+  }
+
+  .align1{
+    position: absolute;
+    top: 400px;
+    left: 300px;
+   
+  }
