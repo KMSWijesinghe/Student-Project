@@ -1,0 +1,95 @@
+.Admin{
+    background-image: url('../images/background2.jpeg');
+    background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /*height: 100vh;*/
+  width: 100%;
+  
+  }
+
+.student{
+    display: flex;
+    justify-content: space-between; /* Ensures boxes are spaced evenly*/
+    align-items: stretch; /* Ensures boxes have the same height */
+    gap: 20px;
+    padding: 300px;
+    font-family: Arial, sans-serif;
+    margin-left: 20em;
+    margin-top: 5em;
+    margin-bottom: 10em;
+    align-items: flex-end;
+	width: 80em;
+	height: 250px;
+    align-items: center;
+	background: red;
+	overflow: hidden;
+	background-color: rgba(0, 0, 0, 0.8);
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 5px 20px 50px #000;
+  }
+
+  .bttn{
+    
+    width: 80%;
+	height: 50px;
+	margin: 10px auto;
+	justify-content: center;
+	display: block;
+	color: #fff;
+	background: #c79200;
+	font-size: 1em;
+	font-weight: bold;
+	margin-top: 30px;
+	outline: none;
+	border: none;
+	border-radius: 5px;
+	transition: .2s ease-in;
+	cursor: pointer;
+  }
+
+  .sellection{
+    
+    width: 30%;
+	height: 50px;
+	margin: 10px auto;
+	justify-content: center;
+	display: block;
+	color: #fff;
+	background: #c79200;
+	font-size: 1em;
+	font-weight: bold;
+	margin-top: 30px;
+	outline: none;
+	border: none;
+	border-radius: 5px;
+	transition: .2s ease-in;
+	cursor: pointer;
+  }
+
+  .studentdetails{
+   
+   
+    
+    margin-bottom: 30px;
+   
+	width: 20em;
+	height: 10em;
+    color: #fff;
+    line-height: 40px;
+	
+	overflow: hidden;
+	background-color: rgba(0, 0, 0, 0.8);
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 5px 20px 50px #000;
+
+
+  }
+
+  .select_block{
+    
+    
+	height: 40px;
+  }
