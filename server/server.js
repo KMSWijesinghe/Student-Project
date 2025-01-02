@@ -8,6 +8,13 @@ import multer from 'multer';
 import path from 'path';
 import nodemailer from 'nodemailer';
 import session from 'express-session';
+import { google } from 'googleapis';
+import fs from 'fs';  // Add this import
+import { promisify } from 'util';
+import { fileURLToPath } from 'url';
+
+
+
 
 
 
@@ -266,108 +273,235 @@ app.get('/logout', (req, res) => {
 });
 
 
+//file google drive uploads start///////////////////////////////////////////////////////////////
 
 
-// Enhanced Multer Storage Configuration
+
+
+
+// File size and type validation
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+const ALLOWED_MIME_TYPES = ['application/pdf'];
+const TEMP_DIR = path.join(process.cwd(), 'temp');
+const DRIVE_FOLDER_ID = '14T_4y6ZZCUpt7_ZnIfIIwRQ0reUJ0ox-'; // Replace with your Google Drive folder ID
+
+// Create temp directory using process.cwd() instead of __dirname
+const tempDir = path.join(process.cwd(), 'temp');
+if (!fs.existsSync(tempDir)) {
+  fs.mkdirSync(tempDir);
+}
+
+// Configure multer with validation
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const uploadDir = path.join(__dirname, 'pdf', 'proposals');
-        
-        // Create directory if it doesn't exist
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
-        }
-        cb(null, uploadDir);
-    },
-    filename: (req, file, cb) => {
-        // Generate unique filename
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, `proposal-${uniqueSuffix}${path.extname(file.originalname)}`);
-    }
+  destination: tempDir,
+  filename: (req, file, cb) => {
+    // Create a safe filename
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  }
 });
 
-
-
-// Enhanced File Filter
 const fileFilter = (req, file, cb) => {
-    // Accept only PDF files
-    if (file.mimetype === 'application/pdf') {
-        cb(null, true);
-    } else {
-        cb(new Error('Only PDF files are allowed'), false);
-    }
+  // Check file type
+  if (!ALLOWED_MIME_TYPES.includes(file.mimetype)) {
+    return cb(new Error('Only PDF files are allowed'), false);
+  }
+  cb(null, true);
 };
 
-// Multer Upload Configuration
-const upload = multer({ 
-    storage: storage,
-    fileFilter: fileFilter,
-    limits: {
-        fileSize: 10 * 1024 * 1024 // 10MB file size limit
-    }
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: MAX_FILE_SIZE
+  },
+  fileFilter: fileFilter
 });
 
+// Google Drive API configuration
+const SCOPES = ['https://www.googleapis.com/auth/drive.file'];
+const auth = new google.auth.GoogleAuth({
+  keyFile: 'credentials.json',
+  scopes: SCOPES,
+});
+const drive = google.drive({ version: 'v3', auth });
 
+// Helper function to clean up temporary files
+const cleanupTempFile = async (filePath) => {
+  try {
+    if (filePath && fs.existsSync(filePath)) {
+      await fs.promises.unlink(filePath);
+    }
+  } catch (error) {
+    console.error('Error cleaning up temp file:', error);
+  }
+};
 
+// Authentication check endpoint
+app.get('/File_Upload', async (req, res) => {
+  try {
+    // Get user session or token validation logic here
+    const isAuthenticated = true; // Replace with your actual auth check
+    const userData = {
+        name: req.session.name, // Assuming you store name in session
+        email: req.email
+    };
 
-// Proposal Upload Route
-app.post('/File_Upload', verifyUser, upload.single('pdf'), (req, res) => {
-    // Check if file was uploaded
+    if (isAuthenticated) {
+      res.json({
+        Status: "Success",
+        name: userData.name,
+        email: userData.email
+      });
+    } else {
+      res.status(401).json({
+        Status: "Error",
+        Error: "Not authenticated"
+      });
+    }
+  } catch (error) {
+    console.error('Auth error:', error);
+    res.status(500).json({
+      Status: "Error",
+      Error: "Authentication failed"
+    });
+  }
+});
+
+// Upload endpoint
+app.post('/File_Upload', upload.single('pdf'), async (req, res) => {
+  let filePath = null;
+  
+  try {
+    // Validate request
     if (!req.file) {
-        return res.status(400).json({ 
-            Status: "Error", 
-            Message: "No file uploaded" 
-        });
+      return res.status(400).json({
+        Status: "Error",
+        Message: "No file uploaded"
+      });
     }
 
-    // Get email from verified user
-    const email = req.email;
-    const proposalFileName = req.file.filename;
-    const proposalFilePath = req.file.path;
-    const uploadDate = new Date();
+    if (!req.body.email) {
+      return res.status(400).json({
+        Status: "Error",
+        Message: "Email is required"
+      });
+    }
 
-    // SQL query to insert proposal details
-    const sql = `
-        INSERT INTO proposal 
-        (email, proposal_status, proposal_file_path, proposal_upload_date) 
-        VALUES (?, ?, ?, ?)
+    filePath = req.file.path;
+    const userEmail = req.body.email;
+
+    // Prepare file metadata for Google Drive
+    const fileMetadata = {
+      name: req.file.originalname,
+      parents: ['14T_4y6ZZCUpt7_ZnIfIIwRQ0reUJ0ox-'] // Your folder ID
+    };
+
+    const media = {
+      mimeType: 'application/pdf',
+      body: fs.createReadStream(filePath)
+    };
+
+    // Upload to Google Drive
+    const driveResponse = drive.files.create({
+        resource: fileMetadata,
+        media: media,
+        fields: 'id, webViewLink'
+    });
+
+    // Set file permissions
+    await drive.permissions.create({
+      fileId: driveResponse.data.id,
+      requestBody: {
+        role: 'reader',
+        type: 'anyone'
+      }
+    });
+
+    // Save to database
+    const insertQuery = `
+      INSERT INTO proposal_upload (
+        file_name,
+        drive_file_id,
+        drive_view_link,
+        user_email,
+        upload_date,
+        status
+      ) VALUES (?, ?, ?, ?, NOW(), 'PENDING')
     `;
 
-    const values = [
-        email, 
-        'PENDING', // Initial status
-        proposalFilePath, 
-        uploadDate
-    ];
+    await query(insertQuery, [
+      req.file.originalname,
+      driveResponse.data.id,
+      driveResponse.data.webViewLink,
+      userEmail
+    ]);
 
-    // Execute database insertion
-    db.query(sql, values, (err, result) => {
-        if (err) {
-            console.error("Error inserting proposal:", err);
-            
-            // Optional: Delete uploaded file if database insertion fails
-            const fs = require('fs');
-            if (fs.existsSync(proposalFilePath)) {
-                fs.unlinkSync(proposalFilePath);
-            }
-
-            return res.status(500).json({ 
-                Status: "Error", 
-                Message: "Failed to save proposal details",
-                Error: err.message 
-            });
-        }
-
-        // Send success response
-        res.status(200).json({ 
-            Status: "Success", 
-            Message: "Proposal uploaded successfully",
-            FileName: proposalFileName,
-            OriginalFileName: req.file.originalname,
-            FilePath: proposalFilePath
-        });
+    // Success response
+    res.json({
+      Status: "Success",
+      Message: "File uploaded successfully",
+      DriveLink: driveResponse.data.webViewLink
     });
+
+  } catch (error) {
+    console.error('Upload error:', error);
+    
+    let errorMessage = "Failed to upload file";
+    let statusCode = 500;
+
+    if (error.code === 'LIMIT_FILE_SIZE') {
+      errorMessage = "File size exceeds 10MB limit";
+      statusCode = 400;
+    } else if (error.message === 'Only PDF files are allowed') {
+      errorMessage = error.message;
+      statusCode = 400;
+    }
+
+    res.status(statusCode).json({
+      Status: "Error",
+      Message: errorMessage
+    });
+
+  } finally {
+    // Clean up temporary file
+    await cleanupTempFile(filePath);
+  }
 });
+
+// Error handling middleware
+app.use((error, req, res, next) => {
+  if (error instanceof multer.MulterError) {
+    if (error.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({
+        Status: "Error",
+        Message: "File size exceeds 10MB limit"
+      });
+    }
+  }
+  
+  console.error('Server error:', error);
+  res.status(500).json({
+    Status: "Error",
+    Message: "Internal server error"
+  });
+});
+
+
+
+
+
+
+
+//Drive upload End
+
+
+
+
+
+
+
+
+
 
 // Authentication Check Route
 app.get('/File_Upload', verifyUser, (req, res) => {
@@ -404,7 +538,81 @@ app.get('/reviewers', (req, res) => {
       });
     }
   });
+
+  app.get('/students', (req, res) => {
+    try {
+      const sql = 'SELECT * FROM studentregister LEFT JOIN proposal ON studentregister.email = proposal.email';
+      
+      db.query(sql, (err, results) => {
+        if (err) {
+          console.error('Error fetching students:', err);
+          return res.status(500).json({
+            error: 'An error occurred while fetching reviewers',
+            details: err.message
+          });
+        }
   
+        // Send the reviewers as a JSON response
+        res.json(results);
+      });
+    } catch (error) {
+      console.error('Unexpected error:', error);
+      res.status(500).json({ 
+        error: 'An unexpected error occurred',
+        details: error.message 
+      });
+    }
+  });
+
+
+
+  // Route for registration (StudentRegister)
+app.post('/AdminHome', (req, res) => {
+    const sql = "INSERT INTO reviewers (rew_name, rew_email, field) VALUES (?)";
+
+    
+
+        const values = [
+            req.body.rew_name,
+            req.body.rew_email,
+            req.body.rew_field,
+            
+
+        ];
+
+        db.query(sql, [values], (err, result) => {
+            if (err) {
+                console.error("Error inserting data into database:", err);
+                return res.json({ Error: "Error inserting data into database" });
+            }
+            return res.json({ Status: "Registration Success" });
+        });
+    
+});
+
+
+
+// Route to get student details by name 
+  app.get('/students/name/:studentName', (req, res) => {
+    const studentName = req.params.studentName;
+    const query = 'SELECT p.*, s.* FROM studentregister s LEFT JOIN proposal p ON s.email = p.email WHERE s.student_id = ?';
+    
+    db.query(query, [studentName], (error, results) => {
+        if (error) {
+            console.error('Database query error:', error);
+            return res.status(500).json({ error: 'Database query error' });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Student not found' });
+        }
+
+        res.json(results[0]);
+    });
+});
+
+
+
 
 
 // Server listening
