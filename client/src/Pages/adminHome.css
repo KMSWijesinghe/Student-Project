@@ -1,0 +1,83 @@
+.AdminAll{
+    background-image: url('../images/background2.jpeg');
+    background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /*height: 100vh;*/
+  width: 100%;
+  
+  }
+
+.StudentLIst{
+    margin-bottom: 30px;
+   
+	width: 25em;
+	height: 20em;
+    color: #fff;
+    line-height: 40px;
+	
+	overflow: hidden;
+	background-color: rgba(0, 0, 0, 0.8);
+	padding: 20px;
+	border-radius: 10px;
+	/* box-shadow: 5px 20px 50px #000; */
+
+
+}
+
+.addReviewers{
+
+    margin-bottom: 30px;
+   
+	width: 25em;
+	height: 21em;
+    color: #fff;
+    line-height: 40px;
+	
+	overflow: hidden;
+	background-color: rgba(0, 0, 0, 0.8);
+	padding: 20px;
+	border-radius: 10px;
+	/* box-shadow: 5px 20px 50px #000; */
+
+
+}
+
+.News{
+    margin-bottom: 30px;
+   
+	width: 25em;
+	height: 20em;
+    color: #fff;
+    line-height: 40px;
+	
+	overflow: hidden;
+	background-color: rgba(0, 0, 0, 0.8);
+	padding: 20px;
+	border-radius: 10px;
+	/* box-shadow: 5px 20px 50px #000; */
+
+
+}
+
+.AdminHome{
+    display: flex;
+    justify-content: space-between; /* Ensures boxes are spaced evenly*/
+    align-items: stretch; /* Ensures boxes have the same height */
+    gap: 20px;
+    padding: 300px;
+    font-family: Arial, sans-serif;
+    margin-left: 10em;
+    margin-top: 10em;
+    margin-bottom: 10em;
+    align-items: flex-end;
+	width: 100em;
+	height: 30em;
+    align-items: center;
+	
+	overflow: hidden;
+	background-color: (180, 150, 6);
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 5px 20px 50px #000;
+  }
