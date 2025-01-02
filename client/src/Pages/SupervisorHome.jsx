@@ -2,10 +2,42 @@ import React, { useEffect, useState } from "react";
 import "./supervisorHome.css"; // Import the CSS file
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { useNavigate } from 'react-router-dom';
+
+import axios from 'axios'
+
+
 
 export default function SupervisorHome() {
   const [students, setStudents] = useState([]);
   const [newsUpdates, setNewsUpdates] = useState([]);
+
+
+  const navigate = useNavigate();
+
+  const[auth,setAuth]=useState(false);
+  const[message,setMessage] = useState('')
+  const[name,setName]=useState('')
+  
+  axios.defaults.withCredentials = true;
+  
+  useEffect(()=>{
+    axios.get('http://localhost:5000/SupervisorHome')
+              .then(res => {
+                  if (res.data.Status === "Success") {
+                      setAuth(true)
+                      setName(res.data.name)
+                     
+                  } else {
+                      setAuth(false)
+                      setMessage(res.data.Error)
+                     
+                  }
+              
+  })
+  
+  
+  })
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -25,9 +57,23 @@ export default function SupervisorHome() {
   }, []);
 
   return (
-    <div className="page">
+    <div className="superHome">
        <Header/>
-    <div className="container">
+       { 
+             auth ?
+           <div>
+          <h2>You are Autherized--{name}</h2>
+           <button className='log' >Logout</button>
+           </div>
+           :
+           <div>{
+            navigate('/Login')
+           }
+           </div>
+          
+
+             }
+    <div className="containersuperviserHome">
       {/* Student Register Box */}
       <div className="align1">
       <div className="box">
