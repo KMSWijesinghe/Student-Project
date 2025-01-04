@@ -12,6 +12,8 @@ import File_Upload from "./components/File_Upload";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Review_Upload from "./Pages/Review_Upload";
+import AdminHome from "./pages/AdminHome";
+import Admin from "./pages/Admin";
 
 
 
@@ -30,6 +32,8 @@ function App() {
           <Route path="/RegistrationProcess" element={<RegistrationProcess/>} />
          <Route path="/file_Upload" element={<File_Upload/>} />
          <Route path="/Review_Upload" element={<Review_Upload/>} />
+         <Route path="/AdminHome" element={<AdminHome/>} />
+         <Route path="/Admin" element={<Admin/>} />
           
         
       </Routes>
